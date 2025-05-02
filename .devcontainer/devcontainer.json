@@ -1,0 +1,22 @@
+{
+  "name": "dl-dev",
+  "build": {
+    "dockerfile": "../docker/Dockerfile.cpu",
+    "context": ".."
+  },
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "python.defaultInterpreterPath": "/usr/bin/python3"
+  },
+  "extensions": [
+    "ms-python.python",
+    "ms-toolsai.jupyter"
+  ],
+  "mounts": [
+    "source=${localWorkspaceFolder}/src,target=/workspace/src,type=bind",
+    "source=${localWorkspaceFolder}/runs,target=/workspace/runs,type=bind"
+  ],
+  "forwardPorts": [8888],
+  "remoteUser": "root"
+}
+

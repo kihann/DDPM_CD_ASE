@@ -1,4 +1,6 @@
+mlflow
+tensorboard
 numpy
 pandas
-matplotlib
 scikit-learn
+matplotlib
