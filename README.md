@@ -1,1 +1,1 @@
-# ddpm_cd_ase
+# DL Template for paper

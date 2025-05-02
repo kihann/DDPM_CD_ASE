@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.log
+*.npy
+*.npz
+
+# Environment files
+.env
+.venv/
+venv/
+
+# Jupyter Notebook 체크포인트
+.ipynb_checkpoints/
+
+# VSCode
+.vscode/
+
+# Docker
+**/__pycache__/
+docker-compose.override.yml
+docker-compose*.log
+*.pid
+*.sock
+
+# TensorBoard logs
+runs/
+logs/
+
+# MLflow
+mlruns/
+mlruns.db
+
+# Devcontainer build files
+.devcontainer/.python-version
+.devcontainer/.mypy_cache/
+.devcontainer/.pytest_cache/
+
+# OS/Editor 별
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.egg
