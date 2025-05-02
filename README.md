@@ -14,3 +14,7 @@ uv pip sync requirements.txt
 ```
 
 ## [Memo]Docker Initialize
+```
+docker builder prune
+docker buildx prune --all
+```
