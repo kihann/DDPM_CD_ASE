@@ -1,32 +1,38 @@
 import utils
 import torch
-
 from diffusers import DDPMPipeline
 
 DEVICE = utils.DEVICE
 MODEL_ID = utils.MODEL_ID
+TIMESTEP = 1000
 
-pipeline = DDPMPipeline.from_pretrained(MODEL_ID)
-pipeline.to(DEVICE)
+pipeline = DDPMPipeline.from_pretrained(MODEL_ID, use_safetensors=False).to(DEVICE)
 
 unet = pipeline.unet.eval()
 scheduler = pipeline.scheduler
+scheduler.set_timesteps(TIMESTEP)
 
-x0 = torch.randn(1, 3, 256, 256).to(DEVICE)
-noise = torch.randn_like(x0)
-timestep = torch.tensor([500], dtype=torch.long, device=DEVICE)
+def generate_consistency_pair(x0: torch.Tensor):
+    """
+    Args:
+        x0 (torch.Tensor): Original clean image batch, shape (B, C, H, W)
+    Returns:
+        xt1, t1, xt2, t2: Noisy image pairs and their timesteps
+    """
+    noise = torch.randn_like(x0)
 
-xt = scheduler.add_noise(original_samples=x0, noise=noise, timesteps=timestep)
+    B = x0.size(0)
+    t1_idx = torch.randint(0, len(scheduler.timesteps), (B,))
+    t2_idx = torch.randint(0, len(scheduler.timesteps), (B,))
 
-def fn_consistency_distillation(teacher_pred):
-    alpha_bar_t = scheduler.alphas_cumprod[timestep].view(-1, 1, 1, 1).to(xt.device)
-    
-    return (xt - (1-alpha_bar_t).sqrt() * teacher_pred) / alpha_bar_t.sqrt()
+    while (t1_idx == t2_idx).any():
+        mask = t1_idx == t2_idx
+        t2_idx[mask] = torch.randint(0, len(scheduler.timesteps), (mask.sum(),))
 
-with torch.no_grad():
-    teacher_pred = unet(xt, timestep).sample
-    x0_teacher = fn_consistency_distillation(teacher_pred)
+    t1 = scheduler.timesteps[t1_idx].to(DEVICE)
+    t2 = scheduler.timesteps[t2_idx].to(DEVICE)
 
-print(f"xt shape: {xt.shape}")
-print(f"teacher_pred shape: {teacher_pred.shape}")
-print(f"x0_teacher shape: {x0_teacher.shape}")
+    xt1 = scheduler.add_noise(x0, noise, t1)
+    xt2 = scheduler.add_noise(x0, noise, t2)
+
+    return xt1, t1, xt2, t2

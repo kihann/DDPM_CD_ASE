@@ -14,4 +14,5 @@ if __name__ == "__main__":
     pass
 else:
     DEVICE = get_available_device()
-    MODEL_ID = "google/ddpm-ema-celebahq-256"
+    MODEL_ID = "google/ddpm-celebahq-256"
+    DATASET_ID = "CelebA"
