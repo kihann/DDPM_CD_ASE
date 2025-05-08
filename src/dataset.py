@@ -13,5 +13,5 @@ def get_dataloader(batch_size: int):
         T.ToTensor(),
     ])
 
-    dataset = CelebA(root="./data", split="train", download=True, transform=transform)
+    dataset = CelebA(root="./data", split="train", download=False, transform=transform)
     return DataLoader(dataset, batch_size=batch_size, shuffle=True)

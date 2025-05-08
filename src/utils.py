@@ -16,3 +16,4 @@ else:
     DEVICE = get_available_device()
     MODEL_ID = "google/ddpm-celebahq-256"
     DATASET_ID = "CelebA"
+    TIMESTEP = 1000
