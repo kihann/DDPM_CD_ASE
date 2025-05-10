@@ -11,6 +11,7 @@ def get_dataloader(batch_size: int):
         T.Resize((256, 256)),
         T.CenterCrop(256),
         T.ToTensor(),
+        T.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
     ])
 
     dataset = CelebA(root="./data", split="train", download=False, transform=transform)
